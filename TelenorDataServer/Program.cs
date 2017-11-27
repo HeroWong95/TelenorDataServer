@@ -10,11 +10,14 @@ namespace TelenorDataServer
         static void Main(string[] args)
         {
             var provider = new TelenorFileProvider();
-            provider.DownloadFile();
-            //provider.DownloadedFiles.Add("SftpFiles\\mytos20171109.tar");
-            provider.DecompressAsync().GetAwaiter().GetResult();
+            //provider.DownloadFile();
+            provider.DownloadedFiles.Add("SftpFiles/mytos20171109.tar");
+
+            //provider.DecompressAsync().GetAwaiter().GetResult();
+            provider.Decompress();
+
+
             Console.WriteLine("Program Execution Complete");
-            Console.ReadKey();
         }
     }
 }
