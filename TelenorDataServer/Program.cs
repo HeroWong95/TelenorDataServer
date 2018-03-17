@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Renci.SshNet;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TelenorDataServer
@@ -9,15 +12,12 @@ namespace TelenorDataServer
     {
         static void Main(string[] args)
         {
-            var provider = new TelenorFileProvider();
-            //provider.DownloadFile();
-            provider.DownloadedFiles.Add("SftpFiles/mytos20171109.tar");
-
-            //provider.DecompressAsync().GetAwaiter().GetResult();
-            provider.Decompress();
-
-
-            Console.WriteLine("Program Execution Complete");
+            var svc = new TelenorService();
+            //svc.ExtractFiles();
+            //Console.WriteLine("running");
+            //File.Create(DateTime.Now.ToString("yyyy-MM-dd.txt"))
+            svc.SyncFiles();
+            Console.ReadKey();
         }
     }
 }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace HappyDog.Infrastructure.Extensions
+namespace TelenorDataServer
 {
-    public static class StringExtension
+    public static class CommandLine
     {
-        public static string Bash(this string cmd)
+        public static string Bush(string cmd)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new Process()
