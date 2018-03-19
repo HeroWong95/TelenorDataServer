@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /TelenorDataServer/SftpFiles
 /TelenorDataServer/PrivateKey
+/TelenorDataServer/mytos_rsa_key

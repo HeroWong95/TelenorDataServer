@@ -13,10 +13,9 @@ namespace TelenorDataServer
         static void Main(string[] args)
         {
             var svc = new TelenorService();
+            //svc.SyncFiles();
             //svc.ExtractFiles();
-            //Console.WriteLine("running");
-            //File.Create(DateTime.Now.ToString("yyyy-MM-dd.txt"))
-            svc.SyncFiles();
+            svc.SaveDataAsync().GetAwaiter().GetResult();
             Console.ReadKey();
         }
     }
