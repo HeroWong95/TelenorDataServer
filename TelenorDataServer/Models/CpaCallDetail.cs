@@ -3,7 +3,6 @@
 namespace TelenorDataServer.Models
 {
     [BsonIgnoreExtraElements]
-    [BsonDiscriminator("cpa_call_details")]
     class CpaCallDetail
     {
         public string Faktura_nr { get; set; }

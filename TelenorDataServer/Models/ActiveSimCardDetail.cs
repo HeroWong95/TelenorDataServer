@@ -3,7 +3,6 @@
 namespace TelenorDataServer.Models
 {
     [BsonIgnoreExtraElements]
-    [BsonDiscriminator("active_sim_card_details")]
     class ActiveSimCardDetail
     {
         public string Mobilnummer { get; set; }

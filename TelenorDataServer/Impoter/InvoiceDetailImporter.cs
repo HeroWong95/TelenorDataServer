@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TelenorDataServer.Models;
 
 namespace TelenorDataServer.Impoter
@@ -9,7 +10,27 @@ namespace TelenorDataServer.Impoter
     {
         public InvoiceDetailImporter(string fileDate) : base(fileDate) { }
 
-        protected override string CollectionName => "invoice_details";
+        protected override string CollectionName => "invoice_details_test";
+
+        protected override async Task OnImportingAsync(List<InvoiceDetail> data)
+        {
+            await base.OnImportingAsync(data);
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(data[i].Fakturadato) && data[i].Fakturadato.Length == 8)
+                {
+                    int year = int.Parse(data[i].Fakturadato.Substring(0, 4));
+                    int month = int.Parse(data[i].Fakturadato.Substring(4, 2));
+                    int day = int.Parse(data[i].Fakturadato.Substring(6));
+                    DateTime invoiceDate = new DateTime(year, month, day);
+                    if (DateTime.Now.AddMonths(-6) > invoiceDate)
+                    {
+                        data.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
         protected override InvoiceDetail Fetch(string data)
         {
             string[] props = data.Split('¤');

@@ -4,7 +4,6 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace TelenorDataServer.Models
 {
     [BsonIgnoreExtraElements]
-    [BsonDiscriminator("support_log")]
     class SupportLog
     {
         [BsonElement("file_date")]

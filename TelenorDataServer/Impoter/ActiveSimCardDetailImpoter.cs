@@ -11,7 +11,7 @@ namespace TelenorDataServer.Impoter
     {
         public ActiveSimCardDetailImpoter(string fileDate) : base(fileDate) { }
 
-        protected override string CollectionName => "active_sim_card_details";
+        protected override string CollectionName => "active_sim_card_details_test";
 
         protected override ActiveSimCardDetail Fetch(string data)
         {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using TelenorDataServer.Models;
+using MongoDB.Driver;
 
 namespace TelenorDataServer.Impoter
 {
@@ -34,9 +36,34 @@ namespace TelenorDataServer.Impoter
             }
             var db = new MongoDbContext();
             var collection = db.GetCollection<T>(CollectionName);
+            await OnImportingAsync(list);
             await collection.InsertManyAsync(list);
+            await OnImportedAsync(list);
         }
 
         protected abstract T Fetch(string data);
+
+        protected async virtual Task OnImportingAsync(List<T> data)
+        {
+            var db = new MongoDbContext();
+            var collection = db.GetCollection<SupportLog>("support_log_test");
+            await collection.InsertOneAsync(new SupportLog
+            {
+                FileDate = FileDate,
+                StartTime = DateTime.Now,
+                SourceLine = data.Count,
+                FileName = CollectionName
+            });
+        }
+
+        protected async Task OnImportedAsync(List<T> data)
+        {
+            var db = new MongoDbContext();
+            var collection = db.GetCollection<SupportLog>("support_log_test");
+            var update = Builders<SupportLog>.Update
+                .Set("end_time", DateTime.Now)
+                .Set("insert_lines", data.Count);
+            await collection.FindOneAndUpdateAsync(l => l.FileDate == FileDate && l.FileName == CollectionName, update);
+        }
     }
 }

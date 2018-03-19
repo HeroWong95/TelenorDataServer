@@ -33,6 +33,10 @@ namespace TelenorDataServer
         public void SyncFiles()
         {
             Logger.Log("Start sync files");
+            if (!Directory.Exists(DirName))
+            {
+                Directory.CreateDirectory(DirName);
+            }
             using (var sftp = new SftpClient(Host, UserName, new PrivateKeyFile("mytos_rsa_key")))
             {
                 sftp.Connect();
@@ -77,10 +81,6 @@ namespace TelenorDataServer
             get
             {
                 var names = new List<string>();
-                if (!Directory.Exists(DirName))
-                {
-                    Directory.CreateDirectory(DirName);
-                }
                 string latestName = Directory.GetFiles(DirName).OrderBy(f => f).LastOrDefault();
                 if (string.IsNullOrEmpty(latestName))
                 {
@@ -110,7 +110,7 @@ namespace TelenorDataServer
         {
             string[] dirs = Directory.GetDirectories(DirName);
             var db = new MongoDbContext();
-            var collection = db.GetCollection<SupportLog>("support_log");
+            var collection = db.GetCollection<SupportLog>("support_log_test");
             foreach (var dir in dirs)
             {
                 string dirName = Path.GetFileName(dir);
@@ -127,7 +127,7 @@ namespace TelenorDataServer
 
                     Logger.Log($"Start import {dirName}/cpa_call_details.csv");
                     path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/cpa_call_details.{fileDate}.csv";
-                    var cpaDetailsImporter = new ActiveSimCardDetailImpoter(fileDate);
+                    var cpaDetailsImporter = new CpaCallDetailImporter(fileDate);
                     await cpaDetailsImporter.Import(path);
                     Logger.Log($"End import {dirName}/cpa_call_details.csv");
 

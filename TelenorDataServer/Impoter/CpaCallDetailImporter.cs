@@ -9,7 +9,7 @@ namespace TelenorDataServer.Impoter
     {
         public CpaCallDetailImporter(string fileDate) : base(fileDate) { }
 
-        protected override string CollectionName => "cpa_call_details";
+        protected override string CollectionName => "cpa_call_details_test";
 
         protected override CpaCallDetail Fetch(string data)
         {

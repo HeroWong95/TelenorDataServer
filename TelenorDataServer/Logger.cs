@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TelenorDataServer
 {
@@ -15,7 +16,7 @@ namespace TelenorDataServer
             builder.AppendLine(text);
         }
 
-        public async static void WriteLogAsync()
+        public async static Task WriteLogAsync()
         {
             string name = DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss") + ".txt";
             await File.WriteAllTextAsync(name, builder.ToString());

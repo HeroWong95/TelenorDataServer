@@ -3,7 +3,6 @@
 namespace TelenorDataServer.Models
 {
     [BsonIgnoreExtraElements]
-    [BsonDiscriminator("customer_account_structure")]
     class CustomerAccountStructure
     {
         public string Organisasjonsnummer { get; set; }

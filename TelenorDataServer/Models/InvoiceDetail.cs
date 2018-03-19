@@ -3,7 +3,6 @@
 namespace TelenorDataServer.Models
 {
     [BsonIgnoreExtraElements]
-    [BsonDiscriminator("invoice_details")]
     class InvoiceDetail
     {
         public string Fakturanummer { get; set; }

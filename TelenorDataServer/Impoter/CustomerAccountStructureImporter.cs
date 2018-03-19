@@ -9,7 +9,7 @@ namespace TelenorDataServer.Impoter
     {
         public CustomerAccountStructureImporter(string fileDate) : base(fileDate) { }
 
-        protected override string CollectionName => "customer_account_structure";
+        protected override string CollectionName => "customer_account_structure_test";
 
         protected override CustomerAccountStructure Fetch(string data)
         {
