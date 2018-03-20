@@ -18,8 +18,13 @@ namespace TelenorDataServer
 
         public async static Task WriteLogAsync()
         {
-            string name = DateTime.Now.ToString("yyyy-MM-dd_hh:mm:ss") + ".txt";
-            await File.WriteAllTextAsync(name, builder.ToString());
+            string name = DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+            const string dirName = "Logs";
+            if (!Directory.Exists(dirName))
+            {
+                Directory.CreateDirectory(dirName);
+            }
+            await File.WriteAllTextAsync(Path.Combine(dirName, name), builder.ToString());
         }
     }
 }
