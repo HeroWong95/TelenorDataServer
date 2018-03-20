@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Renci.SshNet;
-using Renci.SshNet.Sftp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TelenorDataServer.Impoter;
 using TelenorDataServer.Models;
@@ -110,7 +108,7 @@ namespace TelenorDataServer
         {
             string[] dirs = Directory.GetDirectories(DirName);
             var db = new MongoDbContext();
-            var collection = db.GetCollection<SupportLog>("support_log_test");
+            var collection = db.GetCollection<SupportLog>("support_log");
             foreach (var dir in dirs)
             {
                 string dirName = Path.GetFileName(dir);
@@ -145,14 +143,5 @@ namespace TelenorDataServer
                 }
             }
         }
-
-        //private async Task SaveActiveSimCardDetailsAsync(string path)
-        //{
-        //    var lines = await File.ReadAllLinesAsync(path, Encoding.GetEncoding("ISO-8859-1"));
-        //    foreach (var item in lines)
-        //    {
-        //        Console.WriteLine(item);
-        //    }
-        //}
     }
 }

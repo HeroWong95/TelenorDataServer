@@ -46,7 +46,7 @@ namespace TelenorDataServer.Impoter
         protected async virtual Task OnImportingAsync(List<T> data)
         {
             var db = new MongoDbContext();
-            var collection = db.GetCollection<SupportLog>("support_log_test");
+            var collection = db.GetCollection<SupportLog>("support_log");
             await collection.InsertOneAsync(new SupportLog
             {
                 FileDate = FileDate,
@@ -59,7 +59,7 @@ namespace TelenorDataServer.Impoter
         protected async Task OnImportedAsync(List<T> data)
         {
             var db = new MongoDbContext();
-            var collection = db.GetCollection<SupportLog>("support_log_test");
+            var collection = db.GetCollection<SupportLog>("support_log");
             var update = Builders<SupportLog>.Update
                 .Set("end_time", DateTime.Now)
                 .Set("insert_lines", data.Count);

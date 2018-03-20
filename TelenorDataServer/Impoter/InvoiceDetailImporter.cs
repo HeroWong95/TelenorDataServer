@@ -10,7 +10,7 @@ namespace TelenorDataServer.Impoter
     {
         public InvoiceDetailImporter(string fileDate) : base(fileDate) { }
 
-        protected override string CollectionName => "invoice_details_test";
+        protected override string CollectionName => "invoice_details";
 
         protected override async Task OnImportingAsync(List<InvoiceDetail> data)
         {
