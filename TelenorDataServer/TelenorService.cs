@@ -64,7 +64,7 @@ namespace TelenorDataServer
                 if (item.Name.StartsWith("mytos") && item.Name.EndsWith(".tar"))
                 {
                     var dirName = Path.GetFileNameWithoutExtension(item.Name);
-                    if (!Directory.Exists(dirName))
+                    if (!Directory.Exists(DirName + "/" + dirName))
                     {
                         Directory.CreateDirectory(DirName + "/" + dirName);
                         CommandLine.Bush($"tar -xvf {DirName}/{item.Name} -C {DirName}/{dirName}");
