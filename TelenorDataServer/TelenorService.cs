@@ -41,7 +41,9 @@ namespace TelenorDataServer
                 var files = sftp.ListDirectory(RemotePath);
                 foreach (var item in files)
                 {
-                    if (item.Name.EndsWith(".tar") && item.Name.CompareTo(LatestLocalFileName) == 1)
+                    if (item.Name.EndsWith(".tar")
+                        && item.Name.CompareTo(LatestLocalFileName) == 1
+                        && item.Length < 102400)
                     {
                         using (var stream = File.OpenWrite(DirName + "/" + item.Name))
                         {
@@ -78,9 +80,8 @@ namespace TelenorDataServer
         {
             get
             {
-                var names = new List<string>();
                 string latestName = Directory.GetFiles(DirName).OrderBy(f => f).LastOrDefault();
-                if (string.IsNullOrEmpty(latestName))
+                if (latestName == null)
                 {
                     return string.Empty;
                 }
