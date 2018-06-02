@@ -14,6 +14,7 @@ namespace TelenorDataServer
         static void Main(string[] args)
         {
             var svc = new TelenorService();
+            //svc.ShowSftpFiles();
             try
             {
                 svc.SyncFiles();
@@ -27,7 +28,6 @@ namespace TelenorDataServer
             }
             Logger.WriteLogAsync().GetAwaiter().GetResult();
             Console.WriteLine("Finish");
-            Console.ReadKey();
         }
     }
 }

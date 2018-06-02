@@ -43,7 +43,7 @@ namespace TelenorDataServer
                 {
                     if (item.Name.EndsWith(".tar")
                         && item.Name.CompareTo(LatestLocalFileName) == 1
-                        && item.Length < 102400)
+                        && item.Length < 157286400)
                     {
                         using (var stream = File.OpenWrite(DirName + "/" + item.Name))
                         {
@@ -100,6 +100,22 @@ namespace TelenorDataServer
                     if (item.Name.EndsWith(".tar"))
                     {
                         Console.WriteLine(item.Name);
+                    }
+                }
+            }
+        }
+
+        public void ShowSftpFiles()
+        {
+            using (var sftp = new SftpClient(Host, UserName, new PrivateKeyFile("mytos_rsa_key")))
+            {
+                sftp.Connect();
+                var files = sftp.ListDirectory(RemotePath);
+                foreach (var item in files)
+                {
+                    if (item.Name.EndsWith(".tar"))
+                    {
+                        Console.WriteLine(item.Name + "\t" + item.Length);
                     }
                 }
             }
