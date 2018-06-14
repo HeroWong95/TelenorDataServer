@@ -23,22 +23,28 @@ namespace TelenorDataServer.Impoter
         }
 
         protected abstract string CollectionName { get; }
-        protected string DirName => "mytos" + FileDate;
         protected string FileDate { get; }
 
         public async Task Import(string path)
         {
-            var lines = await File.ReadAllLinesAsync(path, Encoding.GetEncoding("ISO8859-1"));
-            List<T> list = new List<T>();
-            for (int i = 1; i < lines.Length; i++)
+            if (File.Exists(path))
             {
-                list.Add(Fetch(lines[i]));
+                var lines = await File.ReadAllLinesAsync(path, Encoding.GetEncoding("ISO8859-1"));
+                List<T> list = new List<T>();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    list.Add(Fetch(lines[i]));
+                }
+                var db = new MongoDbContext();
+                var collection = db.GetCollection<T>(CollectionName);
+                await OnImportingAsync(list);
+                await collection.InsertManyAsync(list);
+                await OnImportedAsync(list);
             }
-            var db = new MongoDbContext();
-            var collection = db.GetCollection<T>(CollectionName);
-            await OnImportingAsync(list);
-            await collection.InsertManyAsync(list);
-            await OnImportedAsync(list);
+            else
+            {
+                Logger.Log("file does not exists path:" + path);
+            }
         }
 
         protected abstract T Fetch(string data);

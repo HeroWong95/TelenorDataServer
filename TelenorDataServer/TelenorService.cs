@@ -39,10 +39,12 @@ namespace TelenorDataServer
             {
                 sftp.Connect();
                 var files = sftp.ListDirectory(RemotePath);
+                var localDir = new DirectoryInfo(DirName);
+                var localFiles = localDir.GetFiles();
                 foreach (var item in files)
                 {
                     if (item.Name.EndsWith(".tar")
-                        && item.Name.CompareTo(LatestLocalFileName) == 1
+                        && localFiles.All(f => f.Name != item.Name)
                         && item.Length < 157286400)
                     {
                         using (var stream = File.OpenWrite(DirName + "/" + item.Name))
@@ -73,19 +75,6 @@ namespace TelenorDataServer
                         Logger.Log($"Extract {item.Name} 100%");
                     }
                 }
-            }
-        }
-
-        private string LatestLocalFileName
-        {
-            get
-            {
-                string latestName = Directory.GetFiles(DirName).OrderBy(f => f).LastOrDefault();
-                if (latestName == null)
-                {
-                    return string.Empty;
-                }
-                return Path.GetFileName(latestName);
             }
         }
 
