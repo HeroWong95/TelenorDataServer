@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TelenorDataServer.Impoter;
 using TelenorDataServer.Models;
@@ -35,6 +36,7 @@ namespace TelenorDataServer
             {
                 Directory.CreateDirectory(DirName);
             }
+            Regex reg = new Regex(@"^mytos\d{8}.tar$");
             using (var sftp = new SftpClient(Host, UserName, new PrivateKeyFile("mytos_rsa_key")))
             {
                 sftp.Connect();
@@ -43,7 +45,7 @@ namespace TelenorDataServer
                 var localFiles = localDir.GetFiles();
                 foreach (var item in files)
                 {
-                    if (item.Name.EndsWith(".tar")
+                    if (reg.IsMatch(item.Name)
                         && localFiles.All(f => f.Name != item.Name)
                         && item.Length < 157286400)
                     {
@@ -121,26 +123,33 @@ namespace TelenorDataServer
                 string fileDate = dirName.Substring(5);
                 var cursor = await collection.FindAsync(f => f.FileDate == fileDate);
                 var logs = (await cursor.ToListAsync()).ToList();
-                if (!logs.Any())
+                string path = null;
+                if (!logs.Any(l=>l.FileName== "active_sim_card_details"))
                 {
                     Logger.Log($"Start import {dirName}/active_sim_card_details.csv");
-                    string path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/active_sim_card_details.{fileDate}.csv";
+                    path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/active_sim_card_details.{fileDate}.csv";
                     var simCardImporter = new ActiveSimCardDetailImpoter(fileDate);
                     await simCardImporter.Import(path);
                     Logger.Log($"End import {dirName}/active_sim_card_details.csv");
-
+                }
+                if (!logs.Any(l => l.FileName == "cpa_call_details"))
+                {
                     Logger.Log($"Start import {dirName}/cpa_call_details.csv");
                     path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/cpa_call_details.{fileDate}.csv";
                     var cpaDetailsImporter = new CpaCallDetailImporter(fileDate);
                     await cpaDetailsImporter.Import(path);
                     Logger.Log($"End import {dirName}/cpa_call_details.csv");
-
+                }
+                if (!logs.Any(l => l.FileName == "customer_account_structure"))
+                {
                     Logger.Log($"Start import {dirName}/customer_account_structure.csv");
                     path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/customer_account_structure.{fileDate}.csv";
                     var casImporter = new CustomerAccountStructureImporter(fileDate);
                     await casImporter.Import(path);
                     Logger.Log($"End import {dirName}/customer_account_structure.csv");
-
+                }
+                if (!logs.Any(l => l.FileName == "invoice_details"))
+                {
                     Logger.Log($"Start import {dirName}/invoice_details.csv");
                     path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/invoice_details.{fileDate}.csv";
                     var invoiceImpoter = new InvoiceDetailImporter(fileDate);

@@ -33,7 +33,15 @@ namespace TelenorDataServer.Impoter
                 List<T> list = new List<T>();
                 for (int i = 1; i < lines.Length; i++)
                 {
-                    list.Add(Fetch(lines[i]));
+                    try
+                    {
+                        list.Add(Fetch(lines[i]));
+                    }
+                    catch (IndexOutOfRangeException e)
+                    {
+                        Logger.Log(e.Message);
+                        Logger.Log("Ingore Error Data: " + lines[i]);
+                    }
                 }
                 var db = new MongoDbContext();
                 var collection = db.GetCollection<T>(CollectionName);
