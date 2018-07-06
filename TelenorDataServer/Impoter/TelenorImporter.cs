@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TelenorDataServer.Models;
 using MongoDB.Driver;
+using System.Linq;
 
 namespace TelenorDataServer.Impoter
 {
@@ -49,7 +50,10 @@ namespace TelenorDataServer.Impoter
                 var db = new MongoDbContext();
                 var collection = db.GetCollection<T>(CollectionName);
                 await OnImportingAsync(list);
-                await collection.InsertManyAsync(list);
+                if (list.Any())
+                {
+                    await collection.InsertManyAsync(list);
+                }
                 await OnImportedAsync(list);
             }
             else

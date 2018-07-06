@@ -12,7 +12,7 @@ using TelenorDataServer.Models;
 
 namespace TelenorDataServer
 {
-    class TelenorService
+    public class TelenorService
     {
         public TelenorService()
         {
@@ -90,7 +90,7 @@ namespace TelenorDataServer
                 {
                     if (item.Name.EndsWith(".tar"))
                     {
-                        Console.WriteLine(item.Name);
+                        Console.WriteLine(item.Name + "\t" + item.Length);
                     }
                 }
             }

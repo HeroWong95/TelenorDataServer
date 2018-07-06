@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +11,8 @@ namespace TelenorDataServer
 
         public static void Log(string text)
         {
-            Console.WriteLine(text);
-            builder.AppendLine(text);
+            Console.WriteLine(DateTime.Now + ": " + text);
+            builder.AppendLine(DateTime.Now + ": " + text);
         }
 
         public async static Task WriteLogAsync()
