@@ -1,11 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-using Renci.SshNet;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace TelenorDataServer
 {
@@ -14,9 +7,9 @@ namespace TelenorDataServer
         static void Main(string[] args)
         {
             var svc = new TelenorService();
-            //svc.ShowSftpFiles();
             try
             {
+                svc.DeleteDataAsync().GetAwaiter().GetResult();
                 svc.SyncFiles();
                 svc.ExtractFiles();
                 svc.SaveDataAsync().GetAwaiter().GetResult();

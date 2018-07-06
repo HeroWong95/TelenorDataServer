@@ -124,7 +124,7 @@ namespace TelenorDataServer
                 var cursor = await collection.FindAsync(f => f.FileDate == fileDate);
                 var logs = (await cursor.ToListAsync()).ToList();
                 string path = null;
-                if (!logs.Any(l=>l.FileName== "active_sim_card_details"))
+                if (!logs.Any(l => l.FileName == "active_sim_card_details"))
                 {
                     Logger.Log($"Start import {dirName}/active_sim_card_details.csv");
                     path = $"{DirName}/{dirName}/data/dwm1/pm/MYTOS/data/active_sim_card_details.{fileDate}.csv";
@@ -157,6 +157,39 @@ namespace TelenorDataServer
                     Logger.Log($"End import {dirName}/invoice_details.csv");
                 }
             }
+        }
+
+        public async Task DeleteDataAsync()
+        {
+            Logger.Log("delete data for GDPR");
+
+            var db = new MongoDbContext();
+            string fileDate = DateTime.Now.AddYears(-2).ToString("yyyyMMdd");
+
+            var filter1 = Builders<SupportLog>.Filter.Lte(l => l.FileDate, fileDate);
+            Logger.Log("start delete support_log where file date <= " + fileDate);
+            var csp = db.GetCollection<SupportLog>("support_log");
+            await csp.DeleteManyAsync(filter1);
+
+            var filter2 = Builders<ActiveSimCardDetail>.Filter.Lte(l => l.FileDate, fileDate);
+            Logger.Log("start delete active_sim_card_details where file date <= " + fileDate);
+            var casd = db.GetCollection<ActiveSimCardDetail>("active_sim_card_details");
+            await casd.DeleteManyAsync(filter2);
+
+            var filter3 = Builders<CpaCallDetail>.Filter.Lte(l => l.FileDate, fileDate);
+            Logger.Log("start delete cpa_call_details where file date <= " + fileDate);
+            var cccd = db.GetCollection<CpaCallDetail>("cpa_call_details");
+            await cccd.DeleteManyAsync(filter3);
+
+            var filter4 = Builders<CustomerAccountStructure>.Filter.Lte(l => l.FileDate, fileDate);
+            Logger.Log("start delete customer_account_structure where file date <= " + fileDate);
+            var ccas = db.GetCollection<CustomerAccountStructure>("customer_account_structure");
+            await ccas.DeleteManyAsync(filter4);
+
+            var filter5 = Builders<InvoiceDetail>.Filter.Lte(l => l.FileDate, fileDate);
+            Logger.Log("start delete invoice_details where file date <= " + fileDate);
+            var cid = db.GetCollection<InvoiceDetail>("invoice_details");
+            await cid.DeleteManyAsync(filter5);
         }
     }
 }

@@ -12,8 +12,8 @@ namespace TelenorDataServer.Merge
         {
             string[] paths = new[]
             {
-                @"C:\Users\hero_\Desktop\invoice_details_MIs.20180614.csv",
-                @"C:\Users\hero_\Desktop\invoice_details.20180614-s.csv",
+                @"C:\Users\hero_\Desktop\a.csv",
+                @"C:\Users\hero_\Desktop\b.csv",
             };
 
             List<string> data = new List<string>();
@@ -30,7 +30,9 @@ namespace TelenorDataServer.Merge
                 }
             }
 
-            File.WriteAllLines(@"C:\Users\hero_\Desktop\invoice_details.20180614_new.csv", data);
+
+
+            File.WriteAllLines(@"C:\Users\hero_\Desktop\invoice_details.20180614.csv", data);
             Console.WriteLine(true);
             Console.ReadKey();
         }

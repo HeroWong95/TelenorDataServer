@@ -25,6 +25,8 @@ namespace TelenorDataServer.Impoter
         protected abstract string CollectionName { get; }
         protected string FileDate { get; }
 
+        int actualLines = 0;
+
         public async Task Import(string path)
         {
             if (File.Exists(path))
@@ -36,6 +38,7 @@ namespace TelenorDataServer.Impoter
                     try
                     {
                         list.Add(Fetch(lines[i]));
+                        actualLines++;
                     }
                     catch (IndexOutOfRangeException e)
                     {
@@ -76,7 +79,7 @@ namespace TelenorDataServer.Impoter
             var collection = db.GetCollection<SupportLog>("support_log");
             var update = Builders<SupportLog>.Update
                 .Set("end_time", DateTime.Now)
-                .Set("insert_lines", data.Count);
+                .Set("insert_lines", actualLines);
             await collection.FindOneAndUpdateAsync(l => l.FileDate == FileDate && l.FileName == CollectionName, update);
         }
     }
